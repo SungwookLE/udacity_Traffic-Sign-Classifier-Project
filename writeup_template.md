@@ -2,7 +2,7 @@
 
 ## Writeup
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+### (12/2) written by sungwook LE
 
 ---
 
@@ -27,6 +27,15 @@ The goals / steps of this project are the following:
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
+
+* My own image set
+[image9]: ./LeNet_Custom(Own)_Architecture.jpg "My own Architecture"
+[image10]: ./learn_monitor.png "Learning Accuracy and Loss"
+[image11]: ./input_img.png "Input Image (the first one)"
+[image12]: ./1st_conv.png "1st converlution Filter Images"
+[image13]: ./2nd_conv.png "2nd converlution Filter Images"
+
+
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
