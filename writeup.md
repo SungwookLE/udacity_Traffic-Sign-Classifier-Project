@@ -150,8 +150,6 @@ My final model consisted of the following layers:
 | Fully connected3		| 250x120, with relu activation and dropout		|
 | Output Layer			| 120x43, 43 is number of unique class label	|
 | Softmax				| etc.        									|
-|						|												|
-|						|												|
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
@@ -209,7 +207,7 @@ If a well known architecture was chosen:
 * Why did you believe it would be relevant to the traffic sign application? Yeap. CNN is good image learner
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
 
-![alt text][image15]
+![alt text][image10]
 the architecture (learning) is well worked as you can see
 
 
@@ -229,7 +227,7 @@ The submission includes five new German Traffic signs found on the web, and the 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
 This is the new_image set from web seaching
-![alt text][image10]
+![alt text][image15]
 
 The results is follow: (well work)
 
