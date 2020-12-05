@@ -33,7 +33,8 @@ The goals / steps of this project are the following:
 [image11]: ./input_img.png "Input Image (the first one)"
 [image12]: ./1st_conv.png "1st converlution Filter Images"
 [image13]: ./2nd_conv.png "2nd converlution Filter Images"
-
+[image14]: ./exploratory_visualization_dataset.png
+[image15]: ./New_image_set.png
 
 
 ## Rubric Points
@@ -64,6 +65,7 @@ signs data set:
 #### 2. Include an exploratory visualization of the dataset.
 
 Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+![alt text][image14]
 ![alt text][image11]
 ![alt text][image12]
 This is the Conv1 activation feature image
@@ -180,7 +182,7 @@ accuracy_operation = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of 90%
+* training set accuracy of 92%
 * validation set accuracy of 89% 
 * test set accuracy of 87%
 
@@ -207,29 +209,56 @@ If a well known architecture was chosen:
 * Why did you believe it would be relevant to the traffic sign application? Yeap. CNN is good image learner
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
 
-![alt text][image10]
+![alt text][image15]
 the architecture (learning) is well worked as you can see
 
 
-### Test a Model on New Images
+### Test a Model on New Images (Update Here 12/3)
+
+** Feedback(12/3)
+1)Test a Model on New Images
+The submission includes five new German Traffic signs found on the web, and the images are visualized. Discussion is made as to particular qualities of the images or traffic signs in the images that are of interest, such as whether they would be difficult for the model to classify.
+--> New Images are used, and get prediction value. 
+
+2)The submission documents the performance of the model when tested on the captured images. The performance on the new images is compared to the accuracy results of the test set.
+--> well under the new_image_set, my architecture performance get worse (it is 60%)
+
+3)The top five softmax probabilities of the predictions on the captured images are outputted. The submission discusses how certain or uncertain the model is of its predictions.
+--> look below the softmax results
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
+This is the new_image set from web seaching
+![alt text][image10]
+
 The results is follow: (well work)
 
-Prediction(Deep Learning)
-13            Yield
-14             Stop
-12    Priority road
+Prediction(that it predict):
+35              Ahead only
+0     Speed limit (20km/h)
+34         Turn left ahead
+40    Roundabout mandatory
+1     Speed limit (30km/h)
 Name: SignName, dtype: object
 
-Label:
-13            Yield
-14             Stop
-12    Priority road
+Label(that I want):
+35               Ahead only
+7     Speed limit (100km/h)
+34          Turn left ahead
+40     Roundabout mandatory
+5      Speed limit (80km/h)
 Name: SignName, dtype: object
 
-Accuracy: 100.0 % !!!
+See Prediction Value as Follow: (SoftMax results)
+[Output Logits]-----------------------------------------------     [CLASS]--------
+[ 36.46881866  21.60078239  18.98638916  17.70350838  11.37428761],[35 33 36 40 34]
+[ 11.21093655   8.41795158   7.66519165   7.44350815   3.90690446],[ 0 28 29  1 38]
+[ 22.94396019  18.64719582  13.03759384  11.4757843   10.07413483],[34 35 33 38 30]
+[ 26.62835693  13.21689034   9.51245213   9.50981998   9.50655174],[40 41 32 42 37]
+[ 11.07282066   9.47307968   7.37226915   6.87585402   6.34128428],[1 5 2 0 3]
+
+--> Shuffle Accuracy: 60.0 % !!!
+
 
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
