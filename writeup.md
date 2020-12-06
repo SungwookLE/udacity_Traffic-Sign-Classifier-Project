@@ -3,7 +3,7 @@
 ## Writeup
 
 ### (12/2) written by sungwook LE
-
+### (12/6) modified by Sungwook
 ---
 
 **Build a Traffic Sign Recognition Project**
@@ -40,7 +40,8 @@ The goals / steps of this project are the following:
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
-My Results: The Last EPOCHs Validation Accuaracy reaches 90%
+My Results: The Last EPOCHs Validation Accuaracy reaches 93.06%
+[html]('./Traffic_Sign_Classifier.html')
 
 ---
 ### Writeup / README
@@ -179,10 +180,10 @@ accuracy_operation = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
-My final model results were:
-* training set accuracy of 92%
-* validation set accuracy of 89% 
-* test set accuracy of 87%
+My final model results were: (UPDATED 12/6!!)
+* training set accuracy of 98.06%
+* validation set accuracy of 93.06% 
+* test set accuracy of 89%
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -262,6 +263,101 @@ See Prediction Value as Follow: (SoftMax results)
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
-
 ![alt text][image12]
 ![alt text][image13]
+
+
+### Feedback From Mentor(12/6)
+#### 1. The submission describes the approach to finding a solution. Accuracy on the validation set is 0.93 or greater.
+
+I modified the model architecture adding a new convolution layer, and deleted one fully connected layer
+Also, I realized that the batch data need more variation.
+Therefore, when I processing the normalization, following steps are added.
+
+first, cv2.getrotationmatrix
+second, cv2.getperspectiveTransform
+
+that two steps are applied randomly about 6.67% of total train_data set
+
+''' [code]
+def normalize_all(input, opt='eval'):
+    
+    input_cpy = np.copy(input)
+    input_cpy = input_cpy.astype(np.uint8)
+    
+    h,w,d = input_cpy[1].shape
+
+    M1 = cv2.getRotationMatrix2D((w/2, h/2), 17, 1)
+    M2 = cv2.getRotationMatrix2D((w/2, h/2), 8, 1)
+    M3 = cv2.getRotationMatrix2D((w/2, h/2), -9, 1)
+    M4 = cv2.getRotationMatrix2D((w/2, h/2), -15, 1)
+    
+    
+    src_pt_x = np.float32([[0,0] , [w-5, 0], [0,h], [w-5, h]])
+    src_pt_y = np.float32([[0,0] , [w, 0], [0,h-5], [w, h-5]])
+    src_pt_xy1 = np.float32([[0,0] , [w-5, 0], [0,h-5], [w-5, h-5]])
+    src_pt_xy2 = np.float32([[0,0] , [w-1, 0], [0,h-2], [w-3, h-4]])
+
+    dst_pt = np.float32([[0,0], [w,0], [0,h], [w,h]])
+    
+    Mx = cv2.getPerspectiveTransform(src_pt_x, dst_pt) 
+    My = cv2.getPerspectiveTransform(src_pt_y, dst_pt) 
+    Mxy1 = cv2.getPerspectiveTransform(src_pt_xy1, dst_pt) 
+    Mxy2 = cv2.getPerspectiveTransform(src_pt_xy2, dst_pt) 
+
+    normal = np.zeros((len(input_cpy[:]), 32,32,1))
+    
+    # Generate fake data.
+    for i in range( len(input_cpy[:]) ):
+        if (opt == 'train'):
+            if (i % 15 ==0):
+                rand_i = np.random.randint(len(input_cpy[:]))
+                input_cpy[rand_i]= cv2.medianBlur(input_cpy[rand_i], 1)
+                index = np.random.randint(8)
+                if index == 1:
+                    input_cpy[rand_i]= cv2.warpAffine(input_cpy[rand_i], M1, (w,h)) 
+                elif index ==2:
+                    input_cpy[rand_i]= cv2.warpAffine(input_cpy[rand_i], M2, (w,h)) 
+                elif index ==3:
+                    input_cpy[rand_i]= cv2.warpAffine(input_cpy[rand_i], M4, (w,h))
+                elif index ==4:
+                    input_cpy[rand_i]= cv2.warpPerspective(input_cpy[rand_i], Mx, (w, h)) 
+                elif index ==5:
+                    input_cpy[rand_i]= cv2.warpPerspective(input_cpy[rand_i], My, (w, h)) 
+                elif index ==6:
+                    input_cpy[rand_i]= cv2.warpPerspective(input_cpy[rand_i], Mxy1, (w, h)) 
+                elif index ==7:
+                    input_cpy[rand_i]= cv2.warpPerspective(input_cpy[rand_i], Mxy2, (w, h)) 
+                else:
+                    input_cpy[rand_i]= cv2.warpAffine(input_cpy[rand_i], M3, (w,h)) 
+                #input_cpy[rand_i]= cv2.flip(input_cpy[rand_i],1)
+        
+        gray_img=cv2.cvtColor(input_cpy[i], cv2.COLOR_RGB2GRAY)
+        hist_equ = cv2.equalizeHist(gray_img).reshape(32,32,1)
+        normal[i] = (hist_equ-128.0)/(128.0-0)
+ 
+    return normal
+'''
+
+then, the training accuaracy could be 0.93 above in my architecture
+
+
+#### 2. The submission includes five new German Traffic signs found on the web, and the images are visualized. Discussion is made as to particular qualities of the images or traffic signs in the images that are of interest, such as whether they would be difficult for the model to classify.
+
+![alt text][image15]
+
+those are the five new German Traffic signs found on the web
+I described the qualities of the images.
+It would be difficult to classify on my architecture because of blurring and color space
+
+#### 3. The submission documents the performance of the model when tested on the captured images. The performance on the new images is compared to the accuracy results of the test set.
+#### In this section, we are expecting answer included the prediction result of the captured pictures or a live camera stream and compare it with the prediction accuracy of your test set.
+
+It looks my model depends on the input(training) data set, how looks the train data. It can classify the traffic sign only he saw before, at least similar to train data. therefore it is important to ensure the training data variance and, it is needed to make some fake data to train the model.
+
+that's why model accuaracy under new_image set was low,
+
+
+
+
+
